@@ -53,9 +53,7 @@
     </div>
   </div>
   <?php endif; ?>
-  <div>
-        <?php if($_SESSION['logged_in'] == true): ?>
-    
 
+  
 </body>
 </html>
