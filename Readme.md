@@ -4,11 +4,11 @@
 
 ## Project features
 - Demo Login panel with set credentials as placeholders
-- See the contents of the files and/or folders
+- See the contents of files and/or folders
 - Navigate through folders
 - Logout functionality
+- delete / upload / download files
 - Create new directories*
-- delete / upload / download files*
 
 *features not available yet.
 

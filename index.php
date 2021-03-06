@@ -8,7 +8,9 @@
     <link rel="stylesheet" href="./custom.css">
 </head>
 <body>
+
 <?php
+// login logic
     $msg = '';
     if (isset($_POST['login']) 
         && !empty($_POST['username']) 
@@ -24,9 +26,100 @@
             $msg = 'Wrong username or password';
         }
       }   
-  ?>     
+  ?>
 
-  <?php if($_SESSION['logged_in'] != true): ?>   
+<?php 
+  // logout logic
+
+  if(isset($_GET['action']) and $_GET['action'] == 'logout'){
+    session_start();
+    unset($_SESSION['username']);
+    unset($_SESSION['password']);
+    unset($_SESSION['logged in']);
+    
+  }     
+
+?>
+
+<?php
+// directory creation logic
+if(isset($_GET["create dir"])){
+  if($_GET["create dir"] != ""){
+    $dir_to_create = './' . $_GET["path"] . $_GET["create_dir"];
+    if(!is_dir($dir_to_create)) mkdir($dir_to_create, 0777, true);
+  }
+  $url = preg_replace("/(&?|\??)create_dir=(.+)?/", "", $_SERVER["REQUEST_URI"]);
+  header('Location: ' . urldecode($url));
+}
+?>
+
+<?php
+    // directory deletion logic
+    if(isset($_POST['delete'])){
+      $objToDelete = './' . $_GET["path"] . $_POST['delete']; 
+      $objToDeleteEscaped = str_replace("&nbsp;", " ", htmlentities($objToDelete, null, 'utf-8'));
+      if(is_file($objToDeleteEscaped)){
+          if (file_exists($objToDeleteEscaped)) {
+              unlink($objToDeleteEscaped);
+          }
+      }
+  }
+?>
+
+<?php
+    // file download logic
+    if(isset($_POST['download'])){
+      print('Path to download: ' . './' . $_GET["path"] . $_POST['download']);
+      $file='./' . $_GET["path"] . $_POST['download'];
+      $fileToDownloadEscaped = str_replace("&nbsp;", " ", htmlentities($file, null, 'utf-8'));
+
+      header('Content-Description: File Transfer');
+      header('Content-Type: application/pdf');
+      header('Content-Disposition: attachment; filename=' . basename($fileToDownloadEscaped));
+      header('Content-Transfer-Encoding: binary');
+      header('Expires: 0');
+      header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+      header('Pragma: public');
+      header('Content-Length: ' . filesize($fileToDownloadEscaped));
+
+      // flush();
+      readfile($fileToDownloadEscaped);
+      exit;
+  }
+  ?>
+
+  <?php
+      // file upload logic
+      if(isset($_FILES['fileToUpload'])){
+        $errors= array();
+        $file_name = $_FILES['fileToUpload']['name'];
+        $file_size = $_FILES['fileToUpload']['size'];
+        $file_tmp = $_FILES['fileToUpload']['tmp_name'];
+        $file_type = $_FILES['fileToUpload']['type'];
+        $file_ext = strtolower(end(explode('.', $_FILES['fileToUpload']['name'])));
+        
+        $extensions= array("jpeg","jpg","png","pdf");
+        
+        if(in_array($file_ext , $extensions) === false){
+           $errors[] = "extension not allowed, please choose a JPEG, PNG or PDF file.";
+        }
+        
+        if($file_size > 2097152) {
+           $errors[] = 'File size must be below 2 MB';
+        }
+        
+        if(empty($errors)==true) {
+           move_uploaded_file($file_tmp, './' . $_GET["path"] . $file_name);
+           echo "Success";
+        }else{
+            print_r($_FILES);
+            print('<br>');
+            print_r($errors);
+        }
+    }
+?>
+
+<?php if($_SESSION['logged_in'] != true): ?>   
   <div class="container">
     <div class="row align-items-center">
       <div>
@@ -58,24 +151,37 @@
             $path = './' . $_GET["path"];
             $files_and_dirs = scandir($path);
             
-            print('<h4>You are currently here: ' . str_replace('?path=','',$_SERVER['REQUEST_URI']) . '</h4>');
             print('<table><th>Type</th><th>Name</th><th>Actions</th>');
             foreach ($files_and_dirs as $fnd){
                 if ($fnd != ".." and $fnd != ".") {
                     print('<tr>');
-                    print('<td>' . (is_dir($path . $fnd) ? "Folder" : "File") . '</td>');
+                    // ./.git/logs
+                    print('<td>' . (is_dir($path . $fnd) ? "Directory" : "File") . '</td>');
                     print('<td>' . (is_dir($path . $fnd) 
                                 ? '<a href="' . (isset($_GET['path']) 
                                         ? $_SERVER['REQUEST_URI'] . $fnd . '/' 
                                         : $_SERVER['REQUEST_URI'] . '?path=' . $fnd . '/') . '">' . $fnd . '</a>'
-                                : $fnd) 
+                                : $fnd)
                         . '</td>');
-                    print('<td></td>');
+                    print('<td>'
+                        . (is_dir($path . $fnd) 
+                            ? ''
+                            : '<form style="display: inline-block" action="" method="post">
+                                <input type="hidden" name="delete" value=' . str_replace(' ', '&nbsp;', $fnd) . '>
+                                <input type="submit" value="Delete">
+                               </form>
+                               <form style="display: inline-block" action="" method="post">
+                                <input type="hidden" name="download" value=' . str_replace(' ', '&nbsp;', $fnd) . '>
+                                <input type="submit" value="Download">
+                               </form>'
+                        ) 
+                        . "</form></td>");
                     print('</tr>');
                 }
             }
             print("</table>");
         ?>
+  <br><br>
 
 
   <div class="container-fluid">
@@ -88,21 +194,20 @@
             }
             </script>
         </div><br>    
-        <div>
-        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">    
-            <input type="name" name="name" class="form-control" id="name" placeholder="Name of new folder">
-        </div>
-        <div>
-            <button type="submit" name="submit" class="btn btn-primary">Submit</button>
-        </div>
-        </form>
+        <form action="/php-file-browser" method="POST">
+                <input type="hidden" name="path" value="<?php print($_GET['path']) ?>" /> 
+                <input placeholder="Name of new folder" type="text" id="create_dir" name="create_dir">
+                <button type="submit">Submit</button>
+            </form>
         <div><br>
-        </form>
-        <div>
-          <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST" enctype="multipart/form-data">
-            <div><input class="form-control" type="file" id="formFile" name="image"></div>
-            <div><button type="submit" name="submit" class="btn btn-primary">Upload</button></div>
-          </form>
+        <form action="" method="post" enctype="multipart/form-data">
+                <input type="file" name="fileToUpload" id="img" style="display:none;"/>
+                <button style="display: block; width: 20%" type="button">
+                    <label for="img">Choose file</label>
+                </button>
+                <button style="display: block; width: 20%" type="submit">Upload</button>
+            </form>
+            <br>
         </div>
         <br>
     </div>
@@ -114,5 +219,5 @@
   </div>
 </div>
 <?php endif; ?>
-</body>
+  </body>
 </html>
