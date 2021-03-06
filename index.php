@@ -1,3 +1,5 @@
+<?php session_start() ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,6 +12,7 @@
 <body>
 
 <?php
+
 // login logic
     $msg = '';
     if (isset($_POST['login']) 
@@ -39,6 +42,8 @@
     
   }     
 
+
+  
 ?>
 
 <?php
@@ -189,12 +194,22 @@ if(isset($_GET["create dir"])){
   <div class="container-fluid">
     <div class="row">
         <div><br>
-            <button type="button" class="btn btn-outline-primary btn-md" onclick="goBack()">Back</button>
+            <!-- <button type="button" class="btn btn-outline-primary btn-md" onclick="goBack()">Back</button>
             <script>
             function goBack() {
               window.history.back();
             }
-            </script>
+            </script> -->
+
+            <nav style="display: inline-block" >
+            <button style="display: block; width: 100%"><a href="<?php 
+                $q_string = explode('/', rtrim($_SERVER['QUERY_STRING'], '/'));
+                array_pop($q_string);
+                count($q_string) == 0 
+                    ? print('?path=/') 
+                    : print('?' . implode('/', $q_string) . '/'); 
+                ?>">Back</a>
+            </button>
         </div><br>    
         <form action="/php-file-browser" method="POST">
                 <input type="hidden" name="path" value="<?php print($_GET['path']) ?>" /> 
