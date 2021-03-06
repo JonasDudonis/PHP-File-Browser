@@ -1,7 +1,5 @@
 # Simple PHP File Browser
 
-https://jonasdudonis.github.io/PHP-File-Browser/
-
 ###  *Sprint-1 Exercise*
 
 ## Project features
