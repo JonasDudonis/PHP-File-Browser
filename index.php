@@ -123,7 +123,9 @@ if(isset($_GET["create dir"])){
   <div class="container">
     <div class="row align-items-center">
       <div>
-        <h1>Please enter your credentials</h1>
+        <h1>Demo PHP File Browser</h1>
+        <div>________________________________________<div>
+        <h2>Please enter your credentials</h2>
         </br>
         <?php echo $msg ?>
         <form action="./index.php" method="POST">
