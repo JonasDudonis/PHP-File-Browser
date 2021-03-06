@@ -1,6 +1,8 @@
 # Simple PHP File Browser
 
-###  Sprint-1 Exercise
+https://jonasdudonis.github.io/PHP-File-Browser/
+
+###  *Sprint-1 Exercise*
 
 ## Project features
 - Demo Login panel with set credentials as placeholders
