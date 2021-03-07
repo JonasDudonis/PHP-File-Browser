@@ -3,12 +3,13 @@
 ###  *Sprint-1 Exercise*
 
 ## Project features
-- Demo Login panel with set credentials as placeholders
+- Demo Login panel with set credentials as visible placeholders
 - See the contents of files and/or folders
 - Navigate through folders
+- 'Back' button functionality
 - Logout functionality
-- delete / upload / download files
-- Create new directories
+- Delete / upload / download files
+- Create new folders
 
 ## Installation
 - Clone the repository or dl .zip
