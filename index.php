@@ -47,13 +47,12 @@
 
 <?php
 // directory creation logic
-if(isset($_GET["create dir"])){
-  if($_GET["create dir"] != ""){
-    $dir_to_create = './' . $_GET["path"] . $_GET["create_dir"];
-    if(!is_dir($dir_to_create)) mkdir($dir_to_create, true);
+if (isset($_POST['create_dir'])) {
+  if (is_dir($_POST['create_dir'])) {
+      print('<div style="color: red;">The directory with name <i><b>' . $_POST['create_dir'] . '</b></i> already exists</div>');
+  } else {
+      mkdir($_GET['path'] . $_POST['create_dir']);
   }
-  $url = preg_replace("/(&?|\??)create_dir=(.+)?/", "", $_SERVER["REQUEST_URI"]);
-  header('Location: ' . urldecode($url));
 }
 ?>
 
@@ -151,8 +150,9 @@ if(isset($_GET["create dir"])){
 
 
   <?php if($_SESSION['logged_in'] == true): ?>
-
+    <h3>Demo-PHP-File-Browser</h3>
     <?php 
+
             $path = './' . $_GET["path"];
             $files_and_dirs = scandir($path);
             
