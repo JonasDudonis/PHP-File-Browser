@@ -35,7 +35,7 @@
   // logout logic
 
   if(isset($_GET['action']) and $_GET['action'] == 'logout'){
-    session_start();
+    session_unset();
     unset($_SESSION['username']);
     unset($_SESSION['password']);
     unset($_SESSION['logged in']);
@@ -43,7 +43,6 @@
   }     
 
 
-  
 ?>
 
 <?php
@@ -51,7 +50,7 @@
 if(isset($_GET["create dir"])){
   if($_GET["create dir"] != ""){
     $dir_to_create = './' . $_GET["path"] . $_GET["create_dir"];
-    if(!is_dir($dir_to_create)) mkdir($dir_to_create, 0777, true);
+    if(!is_dir($dir_to_create)) mkdir($dir_to_create, true);
   }
   $url = preg_replace("/(&?|\??)create_dir=(.+)?/", "", $_SERVER["REQUEST_URI"]);
   header('Location: ' . urldecode($url));
@@ -125,13 +124,12 @@ if(isset($_GET["create dir"])){
 ?>
 
 <?php if($_SESSION['logged_in'] != true): ?>   
-  <div class="container">
-    <div class="row align-items-center">
+  <div class="container" style="text-align: center">
+    <div class="row-align-items-center">
       <div>
         <h1>Demo PHP File Browser</h1>
-        <div>________________________________________<div>
-        <h2>Please enter your credentials</h2>
-        </br>
+        <div class="underline">________________________________________<div>
+        <h4>Please enter your credentials</h4>
         <?php echo $msg ?>
         <form action="./index.php" method="POST">
               <div>
@@ -211,8 +209,8 @@ if(isset($_GET["create dir"])){
                 ?>">Back</a>
             </button>
         </div><br>    
-        <form action="/php-file-browser" method="POST">
-                <input type="hidden" name="path" value="<?php print($_GET['path']) ?>" /> 
+        <form action="" method="POST">
+                <input type="hidden" name="path" value="<?php print($_GET['./']) ?>" /> 
                 <input placeholder="Name of new folder" type="text" id="create_dir" name="create_dir">
                 <button type="submit">Submit</button>
             </form>
@@ -232,7 +230,7 @@ if(isset($_GET["create dir"])){
 
 <div class="container-fluid">
   <div class="row">
-    <div">Click here to <a href = "index.php?action=logout">Logout</a></div>
+    <div">Click here to <a href = "index.php?action=logout">Logout to User Panel</a></div>
   </div>
 </div>
 <?php endif; ?>

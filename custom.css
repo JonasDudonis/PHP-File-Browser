@@ -1,9 +1,11 @@
 body, * {
     font-family: sans-serif;
+    text-align: center;
+    width: 100%;
 }
 
 table, th, td {
-    border: 1px solid rgb(187, 187, 187);
+    border: 1px solid rgb(219, 195, 172);
     border-collapse: collapse;
 }
 
@@ -12,7 +14,7 @@ table {
 }
 
 th {
-    background-color: rgb(207, 165, 126);
+    background-color: rgb(219, 195, 172);
 }
 
 th, td {
@@ -21,6 +23,6 @@ th, td {
 
 .container-fluid {
     text-align:justify;
-    background-color: rgb(219, 219, 219);
+    background-color: rgb(219, 195, 172);
     width: 50%
 }
