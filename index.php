@@ -75,7 +75,8 @@ if (isset($_POST['create_dir'])) {
       print('Path to download: ' . './' . $_GET["path"] . $_POST['download']);
       $file='./' . $_GET["path"] . $_POST['download'];
       $fileToDownloadEscaped = str_replace("&nbsp;", " ", htmlentities($file, null, 'utf-8'));
-
+      ob_clean();
+      ob_start();
       header('Content-Description: File Transfer');
       header('Content-Type: application/pdf');
       header('Content-Disposition: attachment; filename=' . basename($fileToDownloadEscaped));
@@ -85,7 +86,7 @@ if (isset($_POST['create_dir'])) {
       header('Pragma: public');
       header('Content-Length: ' . filesize($fileToDownloadEscaped));
 
-      // flush();
+      flush();
       readfile($fileToDownloadEscaped);
       exit;
   }
