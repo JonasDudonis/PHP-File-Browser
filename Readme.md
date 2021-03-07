@@ -10,7 +10,7 @@
 - Logout functionality
 - Delete / upload / download files
 - Create new folders
-- <span style="color:red">**Surpise in a folder**</span> *'You must open this Folder'*.
+- **Surpise in a folder** 🐱‍👤 *'You must open this Folder'*.
 
 ## Installation
 - Clone the repository or dl .zip
