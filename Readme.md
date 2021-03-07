@@ -8,9 +8,7 @@
 - Navigate through folders
 - Logout functionality
 - delete / upload / download files
-- Create new directories*
-
-*features not available yet.
+- Create new directories
 
 ## Installation
 - Clone the repository or dl .zip
