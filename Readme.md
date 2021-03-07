@@ -10,7 +10,7 @@
 - Logout functionality
 - Delete / upload / download files
 - Create new folders
-- **Surpise in a folder** 🐱‍👤 *'You must open this Folder'*.
+- **Surprise in a folder** 🐱‍👤 *'You must open this Folder'*.
 
 ## Installation
 - Clone the repository or dl .zip
